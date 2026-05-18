@@ -1,33 +1,24 @@
 package br.com.fiap.entities;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Triagem {
-    private String id;              // ID_TRIAGEM
-    private String idBeneficiario;  // ID_BENEFICIARIO (FK)
-    private LocalDate dtTriagem;    // DT_TRIAGEM
-    private String necessidade;     // NECESSIDADE
-    private String prioridade;      // PRIORIDADE
+    private String id, idDentista, idBeneficiario, dsPrioridade, dsLocal;
+    private LocalDateTime dtHr;
 
-    public Triagem() {}
-
-    public Triagem(String id, String idBeneficiario, LocalDate dtTriagem, String necessidade, String prioridade) {
+    public Triagem(String id, LocalDateTime dtHr, String idDentista, String idBeneficiario, String dsPrioridade, String dsLocal) {
         this.id = id;
+        this.dtHr = dtHr;
+        this.idDentista = idDentista;
         this.idBeneficiario = idBeneficiario;
-        this.dtTriagem = dtTriagem;
-        this.necessidade = necessidade;
-        this.prioridade = prioridade;
+        this.dsPrioridade = dsPrioridade;
+        this.dsLocal = dsLocal;
     }
 
-    // Getters e Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
+    public LocalDateTime getDtHr() { return dtHr; }
+    public String getIdDentista() { return idDentista; }
     public String getIdBeneficiario() { return idBeneficiario; }
-    public void setIdBeneficiario(String idBeneficiario) { this.idBeneficiario = idBeneficiario; }
-    public LocalDate getDtTriagem() { return dtTriagem; }
-    public void setDtTriagem(LocalDate dtTriagem) { this.dtTriagem = dtTriagem; }
-    public String getNecessidade() { return necessidade; }
-    public void setNecessidade(String necessidade) { this.necessidade = necessidade; }
-    public String getPrioridade() { return prioridade; }
-    public void setPrioridade(String prioridade) { this.prioridade = prioridade; }
+    public String getDsPrioridade() { return dsPrioridade; }
+    public String getDsLocal() { return dsLocal; }
 }

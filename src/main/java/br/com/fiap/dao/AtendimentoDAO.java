@@ -7,69 +7,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AtendimentoDAO {
-    private Connection conn;
-
-    public AtendimentoDAO() throws Exception {
-        this.conn = new ConexaoFactory().conexao();
-    }
-
     public void inserir(Atendimento a) throws Exception {
-        String sql = "INSERT INTO T_TDB_ATENDIMENTO (ID_ATENDIMENTO, ID_DENTISTA, ID_BENEFICIARIO, ID_TRIAGEM, DT_ATENDIMENTO, DIAGNOSTICO) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = "INSERT INTO T_TDB_ATENDIMENTO (ID_ATENDIMENTO, ID_DENTISTA, ID_BENEFICIARIO, ID_PROGRAMA, DT_HORA, DESCRICAO_TRATAMENTO, CRONOGRAMA_PROCEDIMENTOS, STATUS) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, a.getId());
             ps.setString(2, a.getIdDentista());
             ps.setString(3, a.getIdBeneficiario());
-            ps.setString(4, a.getIdTriagem());
-            ps.setDate(5, Date.valueOf(a.getDtAtendimento()));
-            ps.setString(6, a.getDiagnostico());
-            ps.execute();
+            ps.setString(4, a.getIdPrograma());
+            ps.setTimestamp(5, Timestamp.valueOf(a.getDtHora()));
+            ps.setString(6, a.getDescricaoTratamento());
+            ps.setString(7, a.getCronogramaProcedimentos());
+            ps.setString(8, a.getStatus());
+            ps.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
-            conn.rollback();
-            throw e;
         }
     }
 
-    public List<Atendimento> listarTodos() throws Exception {
+    public List<Atendimento> listar() throws Exception {
         List<Atendimento> lista = new ArrayList<>();
         String sql = "SELECT * FROM T_TDB_ATENDIMENTO";
-        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                lista.add(new Atendimento(
-                        rs.getString("ID_ATENDIMENTO"),
-                        rs.getString("ID_DENTISTA"),
-                        rs.getString("ID_BENEFICIARIO"),
-                        rs.getString("ID_TRIAGEM"),
-                        rs.getDate("DT_ATENDIMENTO").toLocalDate(),
-                        rs.getString("DIAGNOSTICO")
-                ));
+                lista.add(new Atendimento(rs.getString("ID_ATENDIMENTO"), rs.getString("ID_DENTISTA"), rs.getString("ID_BENEFICIARIO"), rs.getString("ID_PROGRAMA"), rs.getTimestamp("DT_HORA").toLocalDateTime(), rs.getString("DESCRICAO_TRATAMENTO"), rs.getString("CRONOGRAMA_PROCEDIMENTOS"), rs.getString("STATUS")));
             }
         }
         return lista;
     }
 
     public void atualizar(Atendimento a) throws Exception {
-        String sql = "UPDATE T_TDB_ATENDIMENTO SET DIAGNOSTICO = ? WHERE ID_ATENDIMENTO = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, a.getDiagnostico());
-            ps.setString(2, a.getId());
+        String sql = "UPDATE T_TDB_ATENDIMENTO SET ID_DENTISTA=?, ID_BENEFICIARIO=?, ID_PROGRAMA=?, DT_HORA=?, DESCRICAO_TRATAMENTO=?, CRONOGRAMA_PROCEDIMENTOS=?, STATUS=? WHERE ID_ATENDIMENTO=?";
+        try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, a.getIdDentista());
+            ps.setString(2, a.getIdBeneficiario());
+            ps.setString(3, a.getIdPrograma());
+            ps.setTimestamp(4, Timestamp.valueOf(a.getDtHora()));
+            ps.setString(5, a.getDescricaoTratamento());
+            ps.setString(6, a.getCronogramaProcedimentos());
+            ps.setString(7, a.getStatus());
+            ps.setString(8, a.getId());
             ps.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
-            conn.rollback();
-            throw e;
         }
     }
 
-    public void deletar(String id) throws Exception {
+    public void remover(String id) throws Exception {
         String sql = "DELETE FROM T_TDB_ATENDIMENTO WHERE ID_ATENDIMENTO = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, id);
             ps.executeUpdate();
             conn.commit();
-        } catch (SQLException e) {
-            conn.rollback();
-            throw e;
         }
     }
 }

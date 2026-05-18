@@ -16,18 +16,18 @@ public class DoacaoResource {
     }
 
     @GET
-    public Response listar(@HeaderParam("role") String role) {
+    public Response listar() {
         try {
-            return Response.ok(bo.listar(role)).build();
+            return Response.ok(bo.listar()).build();
         } catch (Exception e) {
-            return Response.status(403).entity(e.getMessage()).build();
+            return Response.status(400).entity(e.getMessage()).build();
         }
     }
 
     @POST
-    public Response registrar(Doacao d, @HeaderParam("role") String role) {
+    public Response registrar(Doacao d) {
         try {
-            bo.registrar(d, role);
+            bo.cadastrar(d);
             return Response.status(201).build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();
@@ -36,11 +36,11 @@ public class DoacaoResource {
 
     @PUT
     @Path("/{id}")
-    public Response atualizar(@PathParam("id") String id, Doacao d, @HeaderParam("role") String role) {
+    public Response atualizar(@PathParam("id") String id, Doacao d) {
         try {
             d.setId(id);
-            bo.atualizar(d, role);
-            return Response.ok().build();
+            bo.atualizar(d);
+            return Response.ok("{\"status\": \"Sucesso\"}").build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();
         }
@@ -48,9 +48,9 @@ public class DoacaoResource {
 
     @DELETE
     @Path("/{id}")
-    public Response deletar(@PathParam("id") String id, @HeaderParam("role") String role) {
+    public Response deletar(@PathParam("id") String id) {
         try {
-            bo.excluir(id, role);
+            bo.remover(id);
             return Response.noContent().build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();

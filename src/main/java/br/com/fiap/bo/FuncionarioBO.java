@@ -11,23 +11,20 @@ public class FuncionarioBO {
         this.dao = new FuncionarioDAO();
     }
 
-    public void cadastrar(Funcionario f, String role) throws Exception {
-        if (!"ADMIN".equals(role)) throw new Exception("Apenas administradores cadastram funcionários.");
-        dao.inserir(f);
-    }
-
-    public List<Funcionario> listar(String role) throws Exception {
-        if (!"ADMIN".equals(role) && !"FUNCIONARIO".equals(role)) throw new Exception("Acesso negado.");
+    public List<Funcionario> listar() throws Exception {
         return dao.listarTodos();
     }
 
-    public void atualizar(Funcionario f, String role) throws Exception {
-        if (!"ADMIN".equals(role)) throw new Exception("Acesso negado.");
+    public void cadastrar(Funcionario f) throws Exception {
+        if (f == null) throw new Exception("Dados do funcionário não podem ser nulos.");
+        dao.inserir(f);
+    }
+
+    public void atualizar(Funcionario f) throws Exception {
         dao.atualizar(f);
     }
 
-    public void excluir(String id, String role) throws Exception {
-        if (!"ADMIN".equals(role)) throw new Exception("Acesso negado.");
+    public void remover(String id) throws Exception {
         dao.deletar(id);
     }
 }

@@ -1,29 +1,25 @@
 package br.com.fiap.entities;
-
 import java.time.LocalDate;
 
 public class Doacao {
-    private String id;          // ID_DOACAO
-    private String idDoador;    // ID_DOADOR (FK)
-    private double valor;       // VL_DOACAO
-    private LocalDate dtDoacao; // DT_DOACAO
+    private String id, idDoador, formaPagamento, periodicidadePagamento;
+    private double valorDoacao;
+    private LocalDate dtDoacao;
 
-    public Doacao() {}
-
-    public Doacao(String id, String idDoador, double valor, LocalDate dtDoacao) {
+    public Doacao(String id, String idDoador, double valorDoacao, LocalDate dtDoacao, String formaPagamento, String periodicidadePagamento) {
         this.id = id;
         this.idDoador = idDoador;
-        this.valor = valor;
+        this.valorDoacao = valorDoacao;
         this.dtDoacao = dtDoacao;
+        this.formaPagamento = formaPagamento;
+        this.periodicidadePagamento = periodicidadePagamento;
     }
 
-    // Getters e Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getIdDoador() { return idDoador; }
-    public void setIdDoador(String idDoador) { this.idDoador = idDoador; }
-    public double getValor() { return valor; }
-    public void setValor(double valor) { this.valor = valor; }
+    public double getValorDoacao() { return valorDoacao; }
     public LocalDate getDtDoacao() { return dtDoacao; }
-    public void setDtDoacao(LocalDate dtDoacao) { this.dtDoacao = dtDoacao; }
+    public String getFormaPagamento() { return formaPagamento; }
+    public String getPeriodicidadePagamento() { return periodicidadePagamento; }
 }

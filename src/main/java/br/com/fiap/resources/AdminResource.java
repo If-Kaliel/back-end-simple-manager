@@ -1,31 +1,38 @@
 package br.com.fiap.resources;
 
-import br.com.fiap.bo.AdminBO;
-import br.com.fiap.dto.RelatorioGeralDTO;
+import br.com.fiap.bo.*;
+import br.com.fiap.dto.DashboardDTO;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/admin")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class AdminResource {
-    private AdminBO bo;
-
-    public AdminResource() {
-        try {
-            this.bo = new AdminBO();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @GET
-    @Path("/dashboard")
-    public Response dashboard(@HeaderParam("role") String role) {
-        if (bo == null) return Response.status(500).entity("{\"msg\":\"Erro de conexão com o banco\"}").build();
+    public Response getDashboard() {
         try {
-            return Response.ok(bo.gerarDashboard(role)).build();
+            DashboardDTO dashboard = new DashboardDTO(
+                    new BeneficiarioBO().listar(),
+                    new ProgramaBO().listar(),
+                    new TriagemBO().listar(),
+                    new DentistaBO().listar(),
+                    new FuncionarioBO().listar(),
+                    new AtendimentoBO().listar(),
+                    new DoacaoBO().listar(),
+                    new DoadorBO().listar(),
+                    new ProcedimentoBO().listar(),
+                    new ApoloniaBO().listar(),
+                    new ContatoBO().listar()
+            );
+            return Response.ok(dashboard).build();
         } catch (Exception e) {
-            return Response.status(403).entity("{\"msg\":\"" + e.getMessage() + "\"}").build();
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao carregar dados: " + e.getMessage())
+                    .build();
         }
     }
 }

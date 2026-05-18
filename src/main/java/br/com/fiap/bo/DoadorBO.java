@@ -5,31 +5,21 @@ import br.com.fiap.entities.Doador;
 import java.util.List;
 
 public class DoadorBO {
-    private DoadorDAO dao;
+    private DoadorDAO dao = new DoadorDAO();
 
-    public DoadorBO() throws Exception {
-        this.dao = new DoadorDAO();
-    }
-
-    public void cadastrar(Doador d, String role) throws Exception {
-        // Apenas funcionários registram doadores oficialmente
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso Negado.");
-        if (d.getVlDoacao() <= 0) throw new Exception("Valor da doação deve ser positivo.");
+    public void cadastrar(Doador d) throws Exception {
         dao.inserir(d);
     }
 
-    public List<Doador> listar(String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso Negado.");
-        return dao.listarTodos();
+    public List<Doador> listar() throws Exception {
+        return dao.listar();
     }
 
-    public void atualizar(Doador d, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso Negado.");
+    public void atualizar(Doador d) throws Exception {
         dao.atualizar(d);
     }
 
-    public void excluir(String id, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso Negado.");
-        dao.deletar(id);
+    public void remover(String id) throws Exception {
+        dao.remover(id);
     }
 }

@@ -5,30 +5,21 @@ import br.com.fiap.entities.Doacao;
 import java.util.List;
 
 public class DoacaoBO {
-    private DoacaoDAO dao;
+    private DoacaoDAO dao = new DoacaoDAO();
 
-    public DoacaoBO() throws Exception {
-        this.dao = new DoacaoDAO();
-    }
-
-    public void registrar(Doacao d, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso negado.");
-        if (d.getValor() <= 0) throw new Exception("Valor inválido.");
+    public void cadastrar(Doacao d) throws Exception {
         dao.inserir(d);
     }
 
-    public List<Doacao> listar(String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso negado.");
-        return dao.listarTodos();
+    public List<Doacao> listar() throws Exception {
+        return dao.listar();
     }
 
-    public void atualizar(Doacao d, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso negado.");
+    public void atualizar(Doacao d) throws Exception {
         dao.atualizar(d);
     }
 
-    public void excluir(String id, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso negado.");
-        dao.deletar(id);
+    public void remover(String id) throws Exception {
+        dao.remover(id);
     }
 }

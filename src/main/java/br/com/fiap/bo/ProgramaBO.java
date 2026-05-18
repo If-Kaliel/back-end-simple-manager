@@ -5,31 +5,10 @@ import br.com.fiap.entities.Programa;
 import java.util.List;
 
 public class ProgramaBO {
-    private ProgramaDAO dao;
+    private ProgramaDAO dao = new ProgramaDAO();
 
-    public ProgramaBO() throws Exception {
-        this.dao = new ProgramaDAO();
-    }
-
-    public void cadastrar(Programa p, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso Negado.");
-        if (p.getNome() == null || p.getNome().isEmpty()) throw new Exception("Nome do programa é obrigatório.");
-        dao.inserir(p);
-    }
-
-    public List<Programa> listar(String role) throws Exception {
-        // Dentistas e Funcionários podem ver os programas disponíveis
-        if (!"FUNCIONARIO".equals(role) && !"DENTISTA".equals(role)) throw new Exception("Acesso Negado.");
-        return dao.listarTodos();
-    }
-
-    public void atualizar(Programa p, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Apenas funcionários editam programas.");
-        dao.atualizar(p);
-    }
-
-    public void excluir(String id, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Apenas funcionários excluem programas.");
-        dao.deletar(id);
-    }
+    public List<Programa> listar() throws Exception { return dao.listar(); }
+    public void cadastrar(Programa p) throws Exception { dao.inserir(p); }
+    public void atualizar(Programa p) throws Exception { dao.atualizar(p); }
+    public void deletar(String id) throws Exception { dao.deletar(id); }
 }

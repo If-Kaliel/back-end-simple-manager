@@ -5,29 +5,21 @@ import br.com.fiap.entities.Procedimento;
 import java.util.List;
 
 public class ProcedimentoBO {
-    private ProcedimentoDAO dao;
+    private ProcedimentoDAO dao = new ProcedimentoDAO();
 
-    public ProcedimentoBO() throws Exception {
-        this.dao = new ProcedimentoDAO();
-    }
-
-    public void cadastrar(Procedimento p, String role) throws Exception {
-        if (!"DENTISTA".equals(role) && !"FUNCIONARIO".equals(role)) throw new Exception("Acesso negado.");
-        if (p.getValor() < 0) throw new Exception("Valor não pode ser negativo.");
+    public void cadastrar(Procedimento p) throws Exception {
         dao.inserir(p);
     }
 
-    public List<Procedimento> listar(String role) throws Exception {
-        return dao.listarTodos();
+    public List<Procedimento> listar() throws Exception {
+        return dao.listar();
     }
 
-    public void atualizar(Procedimento p, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Apenas funcionários editam valores de procedimentos.");
+    public void atualizar(Procedimento p) throws Exception {
         dao.atualizar(p);
     }
 
-    public void excluir(String id, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso negado.");
-        dao.deletar(id);
+    public void remover(String id) throws Exception {
+        dao.remover(id);
     }
 }

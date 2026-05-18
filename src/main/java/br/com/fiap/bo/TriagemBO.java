@@ -5,28 +5,21 @@ import br.com.fiap.entities.Triagem;
 import java.util.List;
 
 public class TriagemBO {
-    private TriagemDAO dao;
+    private TriagemDAO dao = new TriagemDAO();
 
-    public TriagemBO() throws Exception {
-        this.dao = new TriagemDAO();
-    }
-
-    public void cadastrar(Triagem t, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role) && !"DENTISTA".equals(role)) throw new Exception("Acesso negado.");
+    public void cadastrar(Triagem t) throws Exception {
         dao.inserir(t);
     }
 
-    public List<Triagem> listar(String role) throws Exception {
-        return dao.listarTodos();
+    public List<Triagem> listar() throws Exception {
+        return dao.listar();
     }
 
-    public void atualizar(Triagem t, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Apenas funcionários editam triagens.");
+    public void atualizar(Triagem t) throws Exception {
         dao.atualizar(t);
     }
 
-    public void excluir(String id, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Apenas funcionários excluem triagens.");
-        dao.deletar(id);
+    public void remover(String id) throws Exception {
+        dao.remover(id);
     }
 }

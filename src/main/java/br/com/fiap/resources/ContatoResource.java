@@ -2,7 +2,6 @@ package br.com.fiap.resources;
 
 import br.com.fiap.bo.ContatoBO;
 import br.com.fiap.entities.Contato;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
@@ -11,28 +10,33 @@ import jakarta.ws.rs.core.*;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ContatoResource {
 
-    @Inject
-    ContatoBO bo;
+    private ContatoBO bo;
+
+    // Construtor manual igual às outras Resources (substituindo o @Inject)
+    public ContatoResource() {
+        try {
+            this.bo = new ContatoBO();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GET
+    public Response listar() {
+        try {
+            return Response.ok(bo.listar()).build();
+        } catch (Exception e) {
+            return Response.status(500).entity(e.getMessage()).build();
+        }
+    }
 
     @POST
     public Response enviar(Contato c) {
         try {
-            // Processa o envio de e-mail e salvamento no banco
-            bo.processarContato(c);
-
-            // Retorna 201 Created se tudo ocorrer bem
+            bo.cadastrar(c);
             return Response.status(201).entity("Mensagem enviada com sucesso!").build();
         } catch (Exception e) {
-            // Retorna 400 Bad Request se houver erro
             return Response.status(400).entity(e.getMessage()).build();
-        }
-    }
-    @GET
-    public Response listar() {
-        try {
-            return Response.ok(bo.listarTodos()).build();
-        } catch (Exception e) {
-            return Response.status(500).entity(e.getMessage()).build();
         }
     }
 
@@ -52,7 +56,7 @@ public class ContatoResource {
     @Path("/{id}")
     public Response deletar(@PathParam("id") String id) {
         try {
-            bo.deletar(id);
+            bo.remover(id);
             return Response.ok("Deletado com sucesso!").build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();

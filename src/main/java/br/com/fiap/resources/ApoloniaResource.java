@@ -4,7 +4,6 @@ import br.com.fiap.bo.ApoloniaBO;
 import br.com.fiap.entities.Apolonia;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-import java.util.List;
 
 @Path("/apolonias")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,18 +20,20 @@ public class ApoloniaResource {
     }
 
     @GET
-    public Response listar(@HeaderParam("role") String role) {
+    public Response listar() {
         try {
-            return Response.ok(bo.listar(role)).build();
+            // Removido o envio do 'role'
+            return Response.ok(bo.listar()).build();
         } catch (Exception e) {
-            return Response.status(403).entity(e.getMessage()).build();
+            // Mudei de 403 (Proibido) para 400/500, já que não tem mais bloqueio de acesso
+            return Response.status(400).entity(e.getMessage()).build();
         }
     }
 
     @POST
-    public Response cadastrar(Apolonia a, @HeaderParam("role") String role) {
+    public Response cadastrar(Apolonia a) {
         try {
-            bo.cadastrar(a, role);
+            bo.cadastrar(a);
             return Response.status(201).build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();
@@ -41,10 +42,10 @@ public class ApoloniaResource {
 
     @PUT
     @Path("/{id}")
-    public Response atualizar(@PathParam("id") String id, Apolonia a, @HeaderParam("role") String role) {
+    public Response atualizar(@PathParam("id") String id, Apolonia a) {
         try {
             a.setId(id);
-            bo.atualizar(a, role);
+            bo.atualizar(a);
             return Response.ok("{\"status\": \"Sucesso\"}").build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();
@@ -53,9 +54,9 @@ public class ApoloniaResource {
 
     @DELETE
     @Path("/{id}")
-    public Response deletar(@PathParam("id") String id, @HeaderParam("role") String role) {
+    public Response deletar(@PathParam("id") String id) {
         try {
-            bo.remover(id, role);
+            bo.remover(id);
             return Response.noContent().build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();

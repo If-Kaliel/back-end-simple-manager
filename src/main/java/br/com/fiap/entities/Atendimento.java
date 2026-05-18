@@ -1,37 +1,29 @@
 package br.com.fiap.entities;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Atendimento {
-    private String id;              // ID_ATENDIMENTO
-    private String idDentista;      // ID_DENTISTA (FK)
-    private String idBeneficiario;  // ID_BENEFICIARIO (FK)
-    private String idTriagem;       // ID_TRIAGEM (FK)
-    private LocalDate dtAtendimento; // DT_ATENDIMENTO
-    private String diagnostico;      // DIAGNOSTICO
+    private String id, idDentista, idBeneficiario, idPrograma, descricaoTratamento, cronogramaProcedimentos, status;
+    private LocalDateTime dtHora;
 
-    public Atendimento() {}
-
-    public Atendimento(String id, String idDentista, String idBeneficiario, String idTriagem, LocalDate dtAtendimento, String diagnostico) {
+    public Atendimento(String id, String idDentista, String idBeneficiario, String idPrograma, LocalDateTime dtHora, String descricaoTratamento, String cronogramaProcedimentos, String status) {
         this.id = id;
         this.idDentista = idDentista;
         this.idBeneficiario = idBeneficiario;
-        this.idTriagem = idTriagem;
-        this.dtAtendimento = dtAtendimento;
-        this.diagnostico = diagnostico;
+        this.idPrograma = idPrograma;
+        this.dtHora = dtHora;
+        this.descricaoTratamento = descricaoTratamento;
+        this.cronogramaProcedimentos = cronogramaProcedimentos;
+        this.status = status;
     }
 
     // Getters e Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getIdDentista() { return idDentista; }
-    public void setIdDentista(String idDentista) { this.idDentista = idDentista; }
     public String getIdBeneficiario() { return idBeneficiario; }
-    public void setIdBeneficiario(String idBeneficiario) { this.idBeneficiario = idBeneficiario; }
-    public String getIdTriagem() { return idTriagem; }
-    public void setIdTriagem(String idTriagem) { this.idTriagem = idTriagem; }
-    public LocalDate getDtAtendimento() { return dtAtendimento; }
-    public void setDtAtendimento(LocalDate dtAtendimento) { this.dtAtendimento = dtAtendimento; }
-    public String getDiagnostico() { return diagnostico; }
-    public void setDiagnostico(String diagnostico) { this.diagnostico = diagnostico; }
+    public String getIdPrograma() { return idPrograma; }
+    public LocalDateTime getDtHora() { return dtHora; }
+    public String getDescricaoTratamento() { return descricaoTratamento; }
+    public String getCronogramaProcedimentos() { return cronogramaProcedimentos; }
+    public String getStatus() { return status; }
 }

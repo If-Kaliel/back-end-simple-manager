@@ -12,22 +12,27 @@ public class AtendimentoResource {
     private AtendimentoBO bo;
 
     public AtendimentoResource() {
-        try { this.bo = new AtendimentoBO(); } catch (Exception e) { e.printStackTrace(); }
+        try {
+            this.bo = new AtendimentoBO();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @GET
-    public Response listar(@HeaderParam("role") String role) {
+    public Response listar() {
         try {
-            return Response.ok(bo.listar(role)).build();
+            return Response.ok(bo.listar()).build();
         } catch (Exception e) {
-            return Response.status(403).entity(e.getMessage()).build();
+            // Alterado de 403 para 400, pois não há mais bloqueio de acesso
+            return Response.status(400).entity(e.getMessage()).build();
         }
     }
 
     @POST
-    public Response cadastrar(Atendimento a, @HeaderParam("role") String role) {
+    public Response cadastrar(Atendimento a) {
         try {
-            bo.cadastrar(a, role);
+            bo.cadastrar(a);
             return Response.status(201).build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();
@@ -36,11 +41,11 @@ public class AtendimentoResource {
 
     @PUT
     @Path("/{id}")
-    public Response atualizar(@PathParam("id") String id, Atendimento a, @HeaderParam("role") String role) {
+    public Response atualizar(@PathParam("id") String id, Atendimento a) {
         try {
             a.setId(id);
-            bo.atualizar(a, role);
-            return Response.ok().build();
+            bo.atualizar(a);
+            return Response.ok("{\"status\": \"Sucesso\"}").build(); // Adicionei um JSON de resposta para manter o padrão
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();
         }
@@ -48,9 +53,10 @@ public class AtendimentoResource {
 
     @DELETE
     @Path("/{id}")
-    public Response deletar(@PathParam("id") String id, @HeaderParam("role") String role) {
+    public Response deletar(@PathParam("id") String id) {
         try {
-            bo.excluir(id, role);
+            // Corrigido de bo.excluir para bo.remover para bater com a sua nova BO
+            bo.remover(id);
             return Response.noContent().build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();

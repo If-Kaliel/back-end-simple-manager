@@ -11,22 +11,20 @@ public class DentistaBO {
         this.dao = new DentistaDAO();
     }
 
-    public void cadastrar(Dentista d, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso Negado.");
-        dao.inserir(d);
-    }
-
-    public List<Dentista> listar(String role) throws Exception {
+    public List<Dentista> listar() throws Exception {
         return dao.listarTodos();
     }
 
-    public void atualizar(Dentista d, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso Negado.");
+    public void cadastrar(Dentista d) throws Exception {
+        if (d == null) throw new Exception("Dados do dentista não podem ser nulos.");
+        dao.inserir(d);
+    }
+
+    public void atualizar(Dentista d) throws Exception {
         dao.atualizar(d);
     }
 
-    public void excluir(String id, String role) throws Exception {
-        if (!"FUNCIONARIO".equals(role)) throw new Exception("Acesso Negado.");
+    public void remover(String id) throws Exception {
         dao.deletar(id);
     }
 }
