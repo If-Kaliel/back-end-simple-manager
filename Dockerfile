@@ -1,19 +1,25 @@
-# Usa a imagem oficial do Java (Eclipse Temurin) versão 21
-FROM eclipse-temurin:21-jdk-alpine
-
-# Define o diretório de trabalho dentro do container
+# --- ETAPA 1: BUILD ---
+# Usamos uma imagem que JÁ VEM com Maven e Java 21 para compilar seu projeto
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copia TODOS os arquivos do projeto para o diretório atual do container
+# Copia tudo para o container
 COPY . .
 
-# Dá permissão de execução ao Maven Wrapper
-# IMPORTANTE: Garanta que o arquivo 'mvnw' esteja na raiz do seu projeto
-RUN chmod +x mvnw
+# Compila o projeto sem precisar do mvnw
+RUN mvn clean package -DskipTests
 
-# Faz o build do projeto com Maven
-# -DskipTests → ignora testes para acelerar
-RUN ./mvnw -DoutputFile=target/mvn-dependency-list.log -B -DskipTests clean dependency:list install
+# --- ETAPA 2: EXECUÇÃO ---
+# Usamos uma imagem leve apenas com o JRE (Java Runtime Environment) para rodar
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
 
-# Comando para iniciar a aplicação Quarkus
-CMD ["sh", "-c", "java -jar target/quarkus-app/quarkus-run.jar"]
+# Copia apenas o arquivo .jar gerado na etapa de build
+# O Quarkus gera o executável dentro da pasta target/quarkus-app
+COPY --from=build /app/target/quarkus-app/quarkus-run.jar ./quarkus-run.jar
+
+# Expõe a porta que o Quarkus usa
+EXPOSE 8080
+
+# Comando para iniciar
+CMD ["java", "-jar", "quarkus-run.jar"]
