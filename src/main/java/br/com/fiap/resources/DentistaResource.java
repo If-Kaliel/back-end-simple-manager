@@ -24,6 +24,20 @@ public class DentistaResource {
         }
     }
 
+    @GET
+    @Path("/{id}")
+    public Response buscarPorId(@PathParam("id") String id) {
+        try {
+            return Response.ok(bo.listar().stream()
+                .filter(d -> d.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new Exception("Dentista nao encontrado: " + id)))
+                .build();
+        } catch (Exception e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        }
+    }
+
     @POST
     public Response cadastrar(Dentista d) {
         try {

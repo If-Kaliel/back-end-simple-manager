@@ -18,15 +18,26 @@ public class FuncionarioResource {
 
     @GET
     public Response listar() {
-        System.out.println("🔍 TESTE - Listando funcionários (Sem credencial necessária)");
         try {
             List<Funcionario> lista = bo.listar();
-            System.out.println("✅ BANCO DE DADOS ENCONTRADO " + lista.size() + " funcionarios.");
             return Response.ok(lista).build();
         } catch (Exception e) {
-            System.err.println("❌ ERRO GRAVE NO JAVA:");
             e.printStackTrace();
             return Response.status(500).entity("Erro interno: " + e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response buscarPorId(@PathParam("id") String id) {
+        try {
+            return Response.ok(bo.listar().stream()
+                .filter(f -> f.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new Exception("Funcionario nao encontrado: " + id)))
+                .build();
+        } catch (Exception e) {
+            return Response.status(404).entity(e.getMessage()).build();
         }
     }
 

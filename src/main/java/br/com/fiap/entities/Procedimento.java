@@ -3,6 +3,8 @@ package br.com.fiap.entities;
 public class Procedimento {
     private String id, idAtendimento, nmProcedimento, duracao;
 
+    public Procedimento() {}
+
     public Procedimento(String id, String idAtendimento, String nmProcedimento, String duracao) {
         this.id = id;
         this.idAtendimento = idAtendimento;
@@ -13,6 +15,9 @@ public class Procedimento {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getIdAtendimento() { return idAtendimento; }
+    public void setIdAtendimento(String idAtendimento) { this.idAtendimento = idAtendimento; }
     public String getNmProcedimento() { return nmProcedimento; }
+    public void setNmProcedimento(String nmProcedimento) { this.nmProcedimento = nmProcedimento; }
     public String getDuracao() { return duracao; }
+    public void setDuracao(String duracao) { this.duracao = duracao; }
 }
