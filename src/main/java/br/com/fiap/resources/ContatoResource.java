@@ -4,6 +4,7 @@ import br.com.fiap.bo.ContatoBO;
 import br.com.fiap.entities.Contato;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
+import java.time.LocalDateTime;
 
 @Path("/contato")
 @Produces(MediaType.APPLICATION_JSON)
@@ -12,7 +13,6 @@ public class ContatoResource {
 
     private ContatoBO bo;
 
-    // Construtor manual igual às outras Resources (substituindo o @Inject)
     public ContatoResource() {
         try {
             this.bo = new ContatoBO();
@@ -33,6 +33,9 @@ public class ContatoResource {
     @POST
     public Response enviar(Contato c) {
         try {
+            if (c.getDtEnvio() == null) {
+                c.setDtEnvio(LocalDateTime.now());
+            }
             bo.cadastrar(c);
             return Response.status(201).entity("Mensagem enviada com sucesso!").build();
         } catch (Exception e) {
