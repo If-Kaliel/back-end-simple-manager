@@ -8,16 +8,15 @@ import java.util.List;
 
 public class AtendimentoDAO {
     public void inserir(Atendimento a) throws Exception {
-        String sql = "INSERT INTO T_TDB_ATENDIMENTO (ID_ATENDIMENTO, ID_DENTISTA, ID_BENEFICIARIO, ID_PROGRAMA, DT_HORA, DESCRICAO_TRATAMENTO, CRONOGRAMA_PROCEDIMENTOS, STATUS) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO T_TDB_ATENDIMENTO (ID_ATENDIMENTO, ID_DENTISTA, ID_BENEFICIARIO, ID_PROGRAMA, DT_HORA, DESCRICAO_TRATAMENTO, CRONOGRAMA_PROCEDIMENTOS, STATUS) VALUES (SQ_ATENDIMENTO.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, a.getId());
-            ps.setString(2, a.getIdDentista());
-            ps.setString(3, a.getIdBeneficiario());
-            ps.setString(4, a.getIdPrograma());
-            ps.setTimestamp(5, Timestamp.valueOf(a.getDtHora()));
-            ps.setString(6, a.getDescricaoTratamento());
-            ps.setString(7, a.getCronogramaProcedimentos());
-            ps.setString(8, a.getStatus());
+            ps.setString(1, a.getIdDentista());
+            ps.setString(2, a.getIdBeneficiario());
+            ps.setString(3, a.getIdPrograma());
+            ps.setTimestamp(4, Timestamp.valueOf(a.getDtHora()));
+            ps.setString(5, a.getDescricaoTratamento());
+            ps.setString(6, a.getCronogramaProcedimentos());
+            ps.setString(7, a.getStatus());
             ps.executeUpdate();
             conn.commit();
         }

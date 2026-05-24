@@ -9,14 +9,13 @@ import java.util.List;
 public class ContatoDAO {
 
     public void inserir(Contato c) throws Exception {
-        String sql = "INSERT INTO T_TDB_CONTATO (ID_CONTATO, NM_CONTATO, DS_EMAIL, DS_MENSAGEM, DT_ENVIO) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO T_TDB_CONTATO (ID_CONTATO, NM_CONTATO, DS_EMAIL, DS_MENSAGEM, DT_ENVIO) VALUES (SQ_CONTATO.NEXTVAL, ?, ?, ?, ?)";
         try (Connection conn = new ConexaoFactory().conexao();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, c.getId());
-            ps.setString(2, c.getNome());
-            ps.setString(3, c.getEmail());
-            ps.setString(4, c.getMensagem());
-            ps.setTimestamp(5, java.sql.Timestamp.valueOf(c.getDtEnvio()));
+            ps.setString(1, c.getNome());
+            ps.setString(2, c.getEmail());
+            ps.setString(3, c.getMensagem());
+            ps.setTimestamp(4, java.sql.Timestamp.valueOf(c.getDtEnvio()));
             ps.executeUpdate();
             conn.commit();
         }

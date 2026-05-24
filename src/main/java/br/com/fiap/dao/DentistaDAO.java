@@ -9,17 +9,23 @@ import java.util.List;
 public class DentistaDAO {
 
     public void inserir(Dentista d) throws Exception {
-        String sql = "INSERT INTO T_TDB_DENTISTA (ID_DENTISTA, NM_DENTISTA, CRO, ESPECIALIDADE) VALUES (?, ?, ?, ?)";
+        // 1. O SQL agora usa a Sequence do banco para o ID_DENTISTA
+        String sql = "INSERT INTO T_TDB_DENTISTA (ID_DENTISTA, NM_DENTISTA, CRO, ESPECIALIDADE) VALUES (SQ_DENTISTA.NEXTVAL, ?, ?, ?)";
+
         try (Connection conn = new ConexaoFactory().conexao();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, d.getId());
-            ps.setString(2, d.getNome());
-            ps.setString(3, d.getCro());
-            ps.setString(4, d.getEspecialidade());
+
+            // 2. Note que removemos o ps.setString(1, d.getId());
+            // Agora o índice 1 é o NM_DENTISTA
+            ps.setString(1, d.getNome());
+            ps.setString(2, d.getCro());
+            ps.setString(3, d.getEspecialidade());
+
             ps.executeUpdate();
             conn.commit();
         }
     }
+
 
     public List<Dentista> listarTodos() throws Exception {
         List<Dentista> lista = new ArrayList<>();

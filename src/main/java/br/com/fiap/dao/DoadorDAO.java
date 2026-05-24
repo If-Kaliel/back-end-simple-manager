@@ -1,20 +1,22 @@
 package br.com.fiap.dao;
+
 import br.com.fiap.conexoes.ConexaoFactory;
 import br.com.fiap.entities.Doador;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DoadorDAO {
     public void inserir(Doador d) throws Exception {
-        String sql = "INSERT INTO T_TDB_DOADOR (ID_DOADOR, NM_DOADOR, EMAIL) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO T_TDB_DOADOR (ID_DOADOR, NM_DOADOR, EMAIL) VALUES (SQ_DOADOR.NEXTVAL, ?, ?)";
         try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, d.getId());
-            ps.setString(2, d.getNmDoador());
-            ps.setString(3, d.getEmail());
+            ps.setString(1, d.getNmDoador());
+            ps.setString(2, d.getEmail());
             ps.executeUpdate();
             conn.commit();
         }
     }
+
     public List<Doador> listar() throws Exception {
         List<Doador> lista = new ArrayList<>();
         try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement("SELECT * FROM T_TDB_DOADOR"); ResultSet rs = ps.executeQuery()) {
@@ -22,6 +24,7 @@ public class DoadorDAO {
         }
         return lista;
     }
+
     public void atualizar(Doador d) throws Exception {
         try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement("UPDATE T_TDB_DOADOR SET NM_DOADOR=?, EMAIL=? WHERE ID_DOADOR=?")) {
             ps.setString(1, d.getNmDoador());
@@ -31,6 +34,7 @@ public class DoadorDAO {
             conn.commit();
         }
     }
+
     public void remover(String id) throws Exception {
         try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement("DELETE FROM T_TDB_DOADOR WHERE ID_DOADOR = ?")) {
             ps.setString(1, id);

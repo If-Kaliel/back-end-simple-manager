@@ -9,15 +9,13 @@ import java.util.List;
 public class BeneficiarioDAO {
 
     public void inserir(Beneficiario b) throws Exception {
-        String sql = "INSERT INTO T_TDB_BENEFICIARIO (ID_BENEFICIARIO, ID_PROGRAMA, NM_BENEFICIARIO, DT_NASCIMENTO, ENDERECO) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO T_TDB_BENEFICIARIO (ID_BENEFICIARIO, ID_PROGRAMA, NM_BENEFICIARIO, DT_NASCIMENTO, ENDERECO) VALUES (SQ_BENEFICIARIO.NEXTVAL, ?, ?, ?, ?)";
         try (Connection conn = new ConexaoFactory().conexao();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            String id = (b.getId() == null || b.getId().isEmpty()) ? java.util.UUID.randomUUID().toString() : b.getId();
-            ps.setString(1, id);
-            ps.setString(2, b.getIdPrograma());
-            ps.setString(3, b.getNome());
-            ps.setDate(4, Date.valueOf(b.getDtNascimento()));
-            ps.setString(5, b.getEndereco());
+            ps.setString(1, b.getIdPrograma());
+            ps.setString(2, b.getNome());
+            ps.setDate(3, Date.valueOf(b.getDtNascimento()));
+            ps.setString(4, b.getEndereco());
             ps.executeUpdate();
             conn.commit();
         }

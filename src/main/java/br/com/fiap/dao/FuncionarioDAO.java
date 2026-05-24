@@ -9,13 +9,11 @@ import java.util.List;
 public class FuncionarioDAO {
 
     public void inserir(Funcionario f) throws Exception {
-        String sql = "INSERT INTO T_TDB_FUNCIONARIO (ID_FUNCIONARIO, NM_FUNCIONARIO, CARGO) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO T_TDB_FUNCIONARIO (ID_FUNCIONARIO, NM_FUNCIONARIO, CARGO) VALUES (SQ_FUNCIONARIO.NEXTVAL, ?, ?)";
         try (Connection conn = new ConexaoFactory().conexao();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            String id = (f.getId() == null || f.getId().isEmpty()) ? java.util.UUID.randomUUID().toString() : f.getId();
-            ps.setString(1, id);
-            ps.setString(2, f.getNome());
-            ps.setString(3, f.getCargo());
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getCargo());
             ps.executeUpdate();
             conn.commit();
         }

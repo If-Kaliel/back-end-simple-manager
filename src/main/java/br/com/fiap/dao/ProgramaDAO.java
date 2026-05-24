@@ -23,10 +23,9 @@ public class ProgramaDAO {
     }
 
     public void inserir(Programa p) throws Exception {
-        String sql = "INSERT INTO " + TABELA + " (ID_PROGRAMA, NM_PROGRAMA) VALUES (?, ?)";
+        String sql = "INSERT INTO " + TABELA + " (ID_PROGRAMA, NM_PROGRAMA) VALUES (SQ_PROGRAMA.NEXTVAL, ?)";
         try (Connection conn = new ConexaoFactory().conexao(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, p.getId());
-            ps.setString(2, p.getNome());
+            ps.setString(1, p.getNome());
             ps.executeUpdate();
             conn.commit();
         }
